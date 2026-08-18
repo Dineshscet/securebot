@@ -15,6 +15,8 @@ export default function App() {
   const [newUnlocked, setNewUnlocked] = useState(false);
   const [showHelpModal, setShowHelpModal] = useState(false);
 
+  const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL ?? 'https://securebot-backend.onrender.com').replace(/\/$/, '');
+
   // Fetch initial objectives and health status
   useEffect(() => {
     fetchHealthStatus();
@@ -23,7 +25,7 @@ export default function App() {
 
   const fetchHealthStatus = async () => {
     try {
-      const res = await fetch('/api/health/');
+      const res = await fetch(`${API_BASE_URL}/api/health/`);
       if (res.ok) {
         const data = await res.json();
         setStatusInfo(data);
@@ -36,7 +38,7 @@ export default function App() {
 
   const fetchObjectives = async () => {
     try {
-      const res = await fetch('/api/objectives/');
+      const res = await fetch(`${API_BASE_URL}/api/objectives/`);
       if (res.ok) {
         const data = await res.json();
         setObjectives(data.objectives || []);
@@ -59,7 +61,7 @@ export default function App() {
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/chat/', {
+      const response = await fetch(`${API_BASE_URL}/api/chat/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -100,7 +102,7 @@ export default function App() {
     } catch (err) {
       setMessages(prev => [
         ...prev,
-        { role: 'model', content: `⚠️ Network Error: Unable to connect to Django API backend at http://127.0.0.1:8000. Ensure server is running!`, timestamp }
+        { role: 'model', content: `⚠️ Network Error: Unable to connect to Django API backend at ${API_BASE_URL}. Ensure server is running!`, timestamp }
       ]);
     } finally {
       setIsLoading(false);
@@ -111,7 +113,7 @@ export default function App() {
   const handleReset = async () => {
     setIsResetting(true);
     try {
-      await fetch('/api/reset/', { method: 'POST' });
+      await fetch(`${API_BASE_URL}/api/reset/`, { method: 'POST' });
     } catch (e) {
       // ignore network issue on reset
     }
