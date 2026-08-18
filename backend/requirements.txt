@@ -75,7 +75,7 @@ numpy==2.5.1
 ollama==0.6.2
 onnx==1.22.0
 onnxruntime==1.28.0
-onnxruntime-gpu==1.23.2
+onnxruntime
 openai==3.1.0
 opencv-python==5.0.0.93
 outcome==1.3.0.post0
